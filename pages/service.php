@@ -12,22 +12,24 @@ require('controller/retrieve.php');
 if (isset($_POST['btnSubmit'])){
 
     $tfServiceName = $_POST['tfServiceName'];
+    $serviceType = $_POST['serviceType'];
     $tfServicePrice= $_POST['tfServicePrice'];
     $tfStatus=$_POST['tfStatus'];
     
     $createService =  new createService();
-    $createService->Create($tfServiceName,$tfServicePrice,$tfStatus);
+    $createService->Create($tfServiceName,$serviceType,$tfServicePrice,$tfStatus);
 }
     
 if (isset($_POST['btnSave'])){
 
     $tfServiceID = $_POST['tfServiceID'];
     $tfServiceName = $_POST['tfServiceName'];
+    $serviceType = $_POST['serviceType'];
     $tfServicePrice = $_POST['tfServicePrice'];
     
     
     $updateservice =  new updateService();
-    $updateservice->update($tfServiceID,$tfServiceName,$tfServicePrice);
+    $updateservice->update($tfServiceID,$serviceType,$tfServiceName,$tfServicePrice);
 }
 
      
@@ -129,14 +131,25 @@ if (isset($_POST['btnArchive'])){
                                                 </div>
                                 
                                                 <div class="form-group">
-                                                    <label class="col-md-4" style = "font-size: 18px;" align="right" style="margin-top:.30em">Service:</label>
+                                                    <label class="col-md-5" style = "font-size: 18px;" align="right" style="margin-top:.30em">Service:</label>
                                                     <div class="col-md-7">
                                                         <input type="text" class="form-control input-md" name= "tfServiceName" onkeypress='return validateServiceName(event)' required>
                                                     </div>
                                                 </div>
+                                                
+                                                <div class="form-group">
+                                                    <label class="col-md-5" style = "font-size: 18px;" align="right" style="margin-top:.30em">Service Type:</label>
+                                                    <div class="col-md-7">
+                                                        <select class="form-control input-md" name = "serviceType" required>
+                                                            <option value=""></option>
+                                                            <option value="0">Service Request</option>
+                                                            <option value="1">Service Scheduling</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
 														  
                                                 <div class='form-group'>
-                                                    <label class="col-md-4" style = "font-size: 18px;" align="right" style="margin-top:.30em">Price:</label>
+                                                    <label class="col-md-5" style = "font-size: 18px;" align="right" style="margin-top:.30em">Price:</label>
                                                     <div class="col-md-7"> 
                                                         <div class=' input-group'>
                                                             <span class = 'input-group-addon'>₱</span>
@@ -177,6 +190,7 @@ if (isset($_POST['btnArchive'])){
                                                             <tr>
                                                                 
                                                                 <th class = "success" style = "text-align: center; font-size: 20px;">Service</th>
+                                                                <th class = "success" style = "text-align: center; font-size: 20px;">Service Type</th>
                                                                 <th class = "success" style = "text-align: center; font-size: 20px;">Price</th>
                                                                 <th class = "success" style = "text-align: center; font-size: 20px;">Action</th>
                                                     
