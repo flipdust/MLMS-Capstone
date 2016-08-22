@@ -74,17 +74,17 @@
                     
                     <li style="font-size: 20px"><a><i class="fa fa-list-alt"></i> Reports <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                                 <li><a href = "unit-purchase-report.php">Unit Purchase</a></li>
-                                 <li><a href = "cancelled-reservation-report.php">Cancelation of Reserve</a></li>
-                                 <li><a href = "installment-report.php">Installment</a></li>
-                                 <li><a href = "service-request-report.php">Services</a></li>
+                                 <li><a href = "unit-purchase-report.php" style="font-size: 12px">Unit Purchase</a></li>
+                                 <li><a href = "cancelled-reservation-report.php" style="font-size: 12px">Cancelation of Reserve</a></li>
+                                 <li><a href = "installment-report.php" style="font-size: 12px">Installment</a></li>
+                                 <li><a href = "service-request-report.php" style="font-size: 12px">Services</a></li>
                         </ul>
                     </li>
                     
                     <li style="font-size: 20px"><a><i class="fa fa-wrench"></i> Utilities <span class="fa fa-chevron-down"></span></a>
                         <ul class="nav child_menu">
-                             <li><a href = "dependecies-utilities.php">DEPENDENCIES</a></li>
-                            <li><a href = "employee.php">EMPLOYEE</a></li>
+                             <li><a href = "dependencies-utilities.php" style="font-size: 12px">DEPENDENCIES</a></li>
+                            <li><a href = "employee.php" style="font-size: 12px">EMPLOYEE</a></li>
                         </ul>
                     </li>
                 </ul>
