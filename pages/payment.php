@@ -810,7 +810,7 @@ if (isset($_POST['btnArchive'])){
           keys: true
         });
 
-        $('#datatable-responsive3dp').DataTable({bFilter: false, bInfo: false, autoWidth: false});
+        $('#datatable-responsive3dp').DataTable({bFilter: false, bInfo: false, bPaginate: false});
 
         $('#datatable-scroller').DataTable({
           ajax: "controller/viewdata/php",
