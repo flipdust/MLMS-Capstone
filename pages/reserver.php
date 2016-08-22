@@ -96,11 +96,9 @@ if (isset($_POST['btnDeactivate']))
     <link href="../vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
     <link href="../vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
     <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="easyWizard.css">
     <script src="easyWizard.js"></script>
       <style type="text/css">
-      
           #lotMap {
             position: relative;
           }
@@ -153,9 +151,6 @@ if (isset($_POST['btnDeactivate']))
           .owned {
             background: #C62828;
           }
-          .disabled {
-            background: grey;
-          }
 
           .ash {
             //background: #F5F7FA;
@@ -189,10 +184,9 @@ if (isset($_POST['btnDeactivate']))
 
       </style>
         
-         <script>
+        <script>
         $( document ).ready(function() {
             $('.containerLevelMap').width($('.ash').width());
-            window.intNoUnit = 1;
         });
             function validateNumber(evt) {
                     evt = (evt) ? evt : window.event;
@@ -205,7 +199,6 @@ if (isset($_POST['btnDeactivate']))
                 }
             
             $(function(){
-
               $('body').on('change', '#selectSection', function(){
                 $('#selectBlock').html('');
                 $('#lotMap').html('');
@@ -220,8 +213,8 @@ if (isset($_POST['btnDeactivate']))
                   if(data != 0) {
                     arrayData = data.split(",");
                     $('#selectBlock').append("<option selected disabled>Choose Block</option>");
-                    for(var i=0; i<arrayData.length-1; i+=4){
-                      $('#selectBlock').append("<option value="+arrayData[i]+" lot="+arrayData[i+2]+" price="+arrayData[i+3]+">"+arrayData[i+1]+"</option>");
+                    for(var i=0; i<arrayData.length-1; i+=3){
+                      $('#selectBlock').append("<option value="+arrayData[i]+" lot="+arrayData[i+2]+">"+arrayData[i+1]+"</option>");
                     }
                   }
                 });
@@ -239,7 +232,7 @@ if (isset($_POST['btnDeactivate']))
                 $.get("getData.php?fnName=getLot&intBlockID="+thisBlockID, function(data){
                   if(data != 0) {
                     arrayData = data.split(",");
-                    for(var i=0; i<arrayData.length-1; i+=3){
+                    for(var i=0; i<arrayData.length-1; i+=4){
                       intLotStatus = arrayData[i+2];
                       switch (intLotStatus) {
                         case '0': lotStatus = "available"; intLotAvailable++; break;
@@ -247,10 +240,7 @@ if (isset($_POST['btnDeactivate']))
                         case '2': lotStatus = "owned"; intLotOwned++; break;
                         default: break;
                       }
-                      strSectionName = $('#selectSection option:selected').html();
-                      strBlockName = $('#selectBlock option:selected').html();
-                      intPrice = $('#selectBlock option:selected').attr('price');
-                      $('#lotMap').append("<div class='lot "+lotStatus+"' id="+arrayData[i]+" lotStatus='"+lotStatus+"' Section='"+strSectionName+"' Block='"+strBlockName+"' Price='"+intPrice+"'>"+arrayData[i+1]+"</div>");
+                      $('#lotMap').append("<div class='lot "+lotStatus+"' id="+arrayData[i]+" lotStatus="+intLotStatus+" price="+arrayData[i+3]+">"+arrayData[i+1]+"</div>");
                       $('#legendLotAvailable').html(intLotAvailable);
                       $('#legendLotReserved').html(intLotReserved);
                       $('#legendLotOwned').html(intLotOwned);
@@ -286,57 +276,9 @@ if (isset($_POST['btnDeactivate']))
               });
 
               $('body').on('click', '.lot', function(){
-                lotID = $(this).attr('id');
-                lotID = '#' + lotID;
-                displayLot(lotID);
-              });
-
-              $('#addunit').on('click', function(){
-                $('#btnBill').show();
-                $('#popUpWindow').modal('hide');
-                $(lotID).addClass('disabled');
-                $('#tableBody').append("<tr><td>"+intNoUnit+++"</td><td><a class='btn btn-round btn-info' lotID='"+lotID+"' onclick='view(this);'><i class='fa fa-eye'></i> View</a></td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>");
-              });
-
-              $('a').on('mousedown', function(){alert("sada"); 
-                //displayLot($(this).attr('lotID'));
-                alert("view");
-              });
-
-              $('#removeunit').on('click', function(){
-                $('#btnBill').show();
-                $('#popUpWindow').modal('hide');
-                $(lotID).removeClass('disabled');
+                $('#popUpWindow').modal('show');
               });
             });
-
-          function view(thisLotID){
-            thisLotID = $(thisLotID).attr('lotID');
-            displayLot(thisLotID);
-          }
-
-          function displayLot(lotID){
-            //lotID = '#' + lotID;
-            strSectionName = $(lotID).attr('Section');
-            strBlockName = $(lotID).attr('Block');
-            strLotName = $(lotID).html();
-            dblPrice = $(lotID).attr('Price');
-            lotStatus = $(lotID).attr('lotStatus');
-            $('#inputSectionName').val(strSectionName);
-            $('#inputBlockName').val(strBlockName);
-            $('#inputPrice').val(dblPrice);
-            $('#inputUnitName').val(strLotName);
-            $('#inputStatus').val(lotStatus);
-            if($(lotID).hasClass("disabled")) {
-              $('#addunit').hide();
-              $('#removeunit').show();
-            }
-            else {
-              $('#addunit').show();
-              $('#removeunit').hide();
-            }
-            $('#popUpWindow').modal('show');
-          }
 
           function addAshcrypt(intLevelID){
             $.get("getData.php?fnName=getAsh&intLevelAshID="+intLevelID, function(data){
@@ -433,8 +375,11 @@ if (isset($_POST['btnDeactivate']))
 
                                     <!-- bill hide untol not adding a unit-->
                                              <div class="form-group" >
-                                                <button id="btnBill" type="button" style="display:none" class="btn btn-success btn-lg col-md-6" data-toggle="modal" data-target="#myModal" ><span class="glyphicon glyphicon-credit-card" aria-hidden="true" ></span> BILL OUT
+                                                <button type="button" class="btn btn-success btn-lg col-md-6" data-toggle="modal" data-target="#billout" ><span class="glyphicon glyphicon-credit-card" aria-hidden="true" ></span> BILL OUT
                                                     </button>
+                                                    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+            Launch A Wizard
+      </button>
                                             </div>
 
                                    <div class="panel panel-success col-md-12">
@@ -598,6 +543,9 @@ if (isset($_POST['btnDeactivate']))
     <script src="../vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js"></script>
     <!-- starrr -->
     <script src="../vendors/starrr/dist/starrr.js"></script>
+     <!-- jQuery Smart Wizard -->
+    <script src="../vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
+    <script type="../vendor/jQuery-Smart-Wizard/js/jquery-1.7.1.min.js"></script>
 
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
@@ -612,11 +560,31 @@ if (isset($_POST['btnDeactivate']))
         }, function(start, end, label) {
           console.log(start.toISOString(), end.toISOString(), label);
         });
+        $('#billout').on('shown', function() {
+          $(".buttonNext").click();
+          $(".buttonNext").focus();
+        })
       });
     </script>
     <!-- /bootstrap-daterangepicker -->
 
+ <!-- jQuery Smart Wizard -->
+    <script>
+      $(document).ready(function() {
+        $('#wizard_verticle').smartWizard();
 
+        $('#wizard_verticle').smartWizard({
+          transitionEffect: 'slide'
+        });
+
+
+
+        $('.buttonNext').addClass('btn btn-success');
+        $('.buttonPrevious').addClass('btn btn-primary');
+        $('.buttonFinish').addClass('btn btn-default');
+      });
+    </script>
+    <!-- /jQuery Smart Wizard -->
   
 
       <!-- Select2 -->
@@ -653,7 +621,7 @@ if (isset($_POST['btnDeactivate']))
 
               <!--------------------------------------LOT DETAILS---->
 
-<div class = "modal fade" id = "popUpWindow" style="z-index:1501;">
+<div class = "modal fade" id = "popUpWindow">
     <div class = "modal-dialog" style = "width:70%; height: 60% ; z-index:1002;">
        <div class = "modal-content">
          <!--header-->
@@ -687,21 +655,21 @@ if (isset($_POST['btnDeactivate']))
                                                   <div class="form-group">
                                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Section: </label>
                                                     <div class="col-md-9 col-sm-9 col-xs-12">
-                                                      <input id="inputSectionName" type="text" class="form-control" readonly="readonly" placeholder="East">
+                                                      <input type="text" class="form-control" readonly="readonly" placeholder="East">
                                                     </div>
                                                   </div>
 
                                                       <div class="form-group">
                                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Block: </label>
                                                     <div class="col-md-9 col-sm-9 col-xs-12">
-                                                      <input id="inputBlockName" type="text" class="form-control" readonly="readonly" placeholder="St.Mattew">
+                                                      <input type="text" class="form-control" readonly="readonly" placeholder="St.Mattew">
                                                     </div>
                                                   </div>
 
                                                       <div class="form-group">
                                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Unit Name: </label>
                                                     <div class="col-md-9 col-sm-9 col-xs-12">
-                                                      <input id="inputUnitName" type="text" class="form-control" readonly="readonly" placeholder="A0001">
+                                                      <input type="text" class="form-control" readonly="readonly" placeholder="A0001">
                                                     </div>
                                                   </div>
                                                     
@@ -717,21 +685,21 @@ if (isset($_POST['btnDeactivate']))
                                              <div class="form-group">
                                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Status: </label>
                                                     <div class="col-md-9 col-sm-9 col-xs-12">
-                                                      <input id="inputStatus" type="text" class="form-control" readonly="readonly" placeholder="Available">
+                                                      <input type="text" class="form-control" readonly="readonly" placeholder="Available">
                                                     </div>
                                                   </div>
 
                                                    <div class="form-group">
                                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Owner: </label>
                                                     <div class="col-md-9 col-sm-9 col-xs-12">
-                                                      <input id="inputOwner" type="text" class="form-control" readonly="readonly" placeholder="N/A">
+                                                      <input type="text" class="form-control" readonly="readonly" placeholder="N/A">
                                                     </div>
                                                   </div>
 
                                                    <div class="form-group">
                                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Price: </label>
                                                     <div class="col-md-9 col-sm-9 col-xs-12">
-                                                      <input id="inputPrice" type="text" class="form-control" readonly="readonly" placeholder="P500,000">
+                                                      <input type="text" class="form-control" readonly="readonly" placeholder="P500,000">
                                                     </div>
                                                   </div>
                                                   
@@ -740,8 +708,6 @@ if (isset($_POST['btnDeactivate']))
                            
                                                  <div class="modal-footer col-md-6" >
                                                     <button  id= "addunit" type="button" class="btn btn-success btn-lg col-md-8" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Unit
-                                                    </button>
-                                                    <button  id="removeunit" type="button" class="btn btn-success btn-lg col-md-8" style="display:none;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Remove Unit
                                                     </button>
                                                   </div>
                             </div>
@@ -763,219 +729,136 @@ if (isset($_POST['btnDeactivate']))
   
 
                <!----------------------------------------------BILL OUT FORM---------------------------------->
- <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="z-index: 1500;">
-    <div class="modal-dialog" role="document" style = "width:80%; height: 90%;">
-          <div class="modal-content">
-                <div class="modal-header">
-                     <button type = "button" class = "close" data-dismiss = "modal">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">BIll OUT FORM</h4>
-                </div>
+               <div class = "modal fade" id = "billout">
+                <div class = "modal-dialog" style = "width:80%; height: 80%; z-index:1001;">
+                   <div class = "modal-content">
+                     <!--header-->
+                      
+                      <div class = "modal-header" style="background:#b3ffb3;">
+                      <button type = "button" class = "close" data-dismiss = "modal">&times;</button>
+                      <h3 class = "modal-title"><b>Bill Out Form</b></h3>
+                     </div>
+                                    
+                     <!--body (form)-->
+                     <div class = "modal-body">
 
-                <div class="modal-body wizard-content">
-                    <div class="wizard-step">
-                        <h2 class="StepTitle">Select Customer</h2>
+                      <div class="row">
+                       <div class=  "col-lg-12">
+                          <div class="panel panel-default">
+                                <div class="panel-body">
+
+                    <!-- Tabs -->
+                    <div id="wizard_verticle" class="form_wizard wizard_verticle">
+                      <ul class="list-unstyled wizard_steps">
+                        <li>
+                          <a class = "active" href="#step-11">
+                            <span class="step_no">1</span>
+                          </a>
+                          </li>
+                        <li>
+                          <a href="#step-22">
+                            <span class="step_no">2</span>
+                          </a>
+                        </li>
+                      </ul>
+
+                      <div id="step-11" sty>
+                        <h2 class="StepTitle">Step 1 Content</h2>
                         <form class="form-horizontal form-label-left">
 
-                              <div class= "col-md-12">
-                                  <span class="section">Personal Info</span>
-                                  <button onclick="add();" type="submit" class="btn btn-success pull-left" name= "btnGo" data-toggle="modal" data-target="#addCust">Add customer</button>
-                                  <div class="form-group">       
-                                        <select class="select2_single form-control" style="width: 400px;" tabindex="-1" >
-                                          <option></option>
-                                          <option>Jeron Cruz</option>
-                                          <option>Daniella Soriano</option>
-                                        </select>
-                                  </div>
-                              
+                      <div class= "col-md-12">
+                          <span class="section">Personal Info</span>
 
-                              <div class="col-md-6"> 
-                                  <div class="form-group">
-                                      <label class="control-label col-md-4 col-sm-3 col-xs-12" for="first-name">First Name
-                                          <span class="required">*</span>
-                                      </label>
-                                      <div class="col-md-7 col-sm-6 col-xs-12">
-                                          <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
-                                      </div>
-                                  </div>
-                              
-
-                              <div class="form-group">
-                                  <label class="control-label col-md-4 col-sm-3 col-xs-12" for="last-name">Last Name
-                                      <span class="required">*</span>
-                                  </label>
-                                  <div class="col-md-7 col-sm-6 col-xs-12">
-                                      <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
-                                  </div>
-                              </div>
-
-                              <div class="form-group">
-                                  <label for="middle-name" class="control-label col-md-4 col-sm-3 col-xs-12">Middle Name
-                                  </label>
-                                  <div class="col-md-7 col-sm-6 col-xs-12">
-                                      <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name">
-                                  </div>
-                              </div>
-
-                              <div class="form-group">
-                                  <label class="control-label col-md-4 col-sm-3 col-xs-12" for="address">Contact No.
-                                      <span class="required">*</span>
-                                  </label>
-                                  <div class="col-md-6 col-sm-6 col-xs-12">
-                                      <input type="text" class="form-control"  required= "required" data-inputmask="'mask' : '(9999) 999-9999'">
-                                  </div>
-                              </div>
-                          
-                              <div class="form-group">
-                                  <label class="control-label col-md-4 col-sm-3 col-xs-12" for="address">Address
-                                      <span class="required">*</span>
-                                  </label>
-                                  <div class="col-md-8 col-sm-6 col-xs-12">
-                                      <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
-                                  </div>
-                              </div>
-                              </div>
-                          
-                              <div class="col-md-6">
-                                 <div class="form-group">
-                                    <label class="control-label col-md-4 col-sm-3 col-xs-12">Date Of Birth 
-                                        <span class="required">*</span>
-                                    </label>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <input id="birthday" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text" data-inputmask="'mask' : '99/99/9999'">
-                                    </div>
-                                  </div>
-                              
-
-                              <div class="item form-group">
-                                  <label class="control-label col-md-4 col-sm-3 col-xs-12" for="email">Email: 
-                                      <span class="required">*</span>
-                                  </label>
-                                  <div class="col-md-8 col-sm-6 col-xs-12">
-                                      <input type="email" id="email" name="email" data-validate-linked="email" required="required" class="form-control col-md-7 col-xs-12">
-                                  </div>
-                              </div>
-
-                              <div class="form-group">
-                                  <label class="control-label col-md-4 col-sm-3 col-xs-12">Gender</label>
-                                  <div class="col-md-6 col-sm-6 col-xs-12">
-                                      <div id="gender" class="btn-group" data-toggle="buttons">
-                                          <label class="btn btn-default" data-toggle-class="btn-success" data-toggle-passive-class="btn-default">
-                                              <input type="radio" name="gender" value="male"> &nbsp; Male &nbsp;
-                                          </label>
-                                          <label class="btn btn-primary" data-toggle-class="btn-default" data-toggle-passive-class="btn-default">
-                                              <input type="radio" name="gender" value="female"> Female
-                                          </label>
-                                      </div>
-                                  </div>
-                              </div>
-                         
-                              <br>
-                              <div class="form-group">
-                                  <label class="control-label col-md-4 col-sm-3 col-xs-12">Civil Status 
-                                  <span class="required">*</span></label>
-                                  Single: 
-                                  <input type="radio" class="flat" name="gender" id="Single" value="Single" checked="" required class="form-control col-md-7 col-xs-12" />   
-                                  Married:  
-                                  <input type="radio" class="flat" name="gender" id="Married" value="Married" checked="" required class="form-control col-md-7 col-xs-12" />  
-                                  Widow: 
-                                  <input type="radio" class="flat" name="gender" id="Widow" value="Widow"  class="form-control col-md-7 col-xs-12"/>   
-                              </div>
-                              </div>
-                              </div>
-                        </form>
-                    </div>
-                
-
-                <div class="wizard-step">
-                    <h2 class="StepTitle">Step 2 Content</h2>
-                    <form class="form-horizontal form-label-left">
-
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <div class="x_panel">
-                                <div class="x_title">
-                                    <h2>Unit List</h2>
-                                    <div class="clearfix"></div>
-                                  
-                                </div>
-
-                 
-                                <div class="table-responsive">
-                                    <table class="table table-striped jambo_table bulk_action">
-                                        <thead>
-                                            <tr class="headings">
-                        
-                                                <th class="column-title">Unit ID</th>
-                                                <th class="column-title">Unit Details</th>
-                                                <th class="column-title">Years to pay</th>
-                                                <th class="column-title">Price</th>
-                                                <th class="column-title">Discounted Price </th>
-                                                <th class="column-title">Monthly</th>
-                                                <th class="column-title no-link last"><span class="nobr">Action</span>
-                                                </th>
-                                                <th class="bulk-actions" colspan="7">
-                                                  <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                                                </th>
-                                            </tr>
-                                      </thead>
-
-                                      <tbody id="tableBody">
-                                          <tr class="even pointer">
-                                  
-                                              <td class=" ">Unit No.1</td>
-                                              <td class=" "><button data-target="#popUpWindow" data-toggle="modal">View</button><i class="success fa fa-long-arrow-up"></i></td>
-                                              <td class=" ">
-                                                  <select class="form-control">
-                                                                <option>1</option>
-                                                  </select>
-                                              </td>
-                                              <td class=" ">P76,230.00</td>
-                                              <td class="a-right a-right ">P9,147.60</td>
-                                              <td class=" ">P6,352.50</td>
-                                              <td class=" last"><a href="#"><button>Remove</button></a>
-                                              </td>
-                                          </tr>
-                                    </tbody>
-                                  </table>
-                              </div>
+                        <div class="col-md-6"> 
+                          <div class="form-group">
+                          <label class="controeel-label col-md-6 col-sm-3 col-xs-12" for="first-name">First Name <span class="required">*</span>
+                          </label>
+                          <div class="col-md-7 col-sm-6 col-xs-12">
+                            <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
+                          </div>
                         </div>
-                    </div>
-                </form>
-            </div>
+                        </div>
+                        </div>
+                        <div class="form-group">
+                          <label class="control-label col-md-4 col-sm-3 col-xs-12" for="last-name">Last Name <span class="required">*</span>
+                          </label>
+                          <div class="col-md-7 col-sm-6 col-xs-12">
+                            <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="middle-name" class="control-label col-md-4 col-sm-3 col-xs-12">Middle Name</label>
+                          <div class="col-md-7 col-sm-6 col-xs-12">
+                            <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name">
+                          </div>
+                        </div>
 
-            <div class="wizard-step">
-                 <h2 class="StepTitle">Step 3 Content</h2>
-                  <div class="panel panel-default">
-                        <div class="panel-body">
-
-                             <div class="form-group col-md-12">
+                        <div class="form-group">
+                          <label class="control-label col-md-4 col-sm-3 col-xs-12" for="address">Contact No.<span class="required">*</span>
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input type="text" class="form-control"  required= "required" data-inputmask="'mask' : '(9999) 999-9999'">
+                          </div>
+                        </div>
                         
-                                          <div class="col-md-6 col-sm-9 col-xs-12">
-                                            <select class="form-control">
-                                              <option>Mode of Payment</option>
-                                              <option>Cash</option>
-                                              <option>Cheque</option>
-                                            </select>
-                                          </div>
 
-                                               <button>Cheque Details</button>  
-                                      </div>
-                                    </div>
-                                    </div>
-            </div>
+                        <div class="form-group">
+                          <label class="control-label col-md-4 col-sm-3 col-xs-12" for="address">Address <span class="required">*</span>
+                          </label>
+                          <div class="col-md-8 col-sm-6 col-xs-12">
+                            <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
+                          </div>
+                        </div>
+                        </div>
 
-            <div class="wizard-step">
-                <form>
-                      <p>GENERATE RECEIPT</p>
-                </form>
-                                         
-            </div>
+                        <div class="col-md-6">
+                         <div class="form-group">
+                          <label class="control-label col-md-4 col-sm-3 col-xs-12">Date Of Birth <span class="required">*</span>
+                          </label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <input id="birthday" class="date-picker form-control col-md-7 col-xs-12" required="required" type="text">
+                          </div>
+                        </div>
 
-            <div class="modal-footer wizard-buttons">
-                <!-- The wizard button will be inserted here. -->
-            </div>
-            </div>
-        </div>
-    </div>
+                        <div class="item form-group">
+                        <label class="control-label col-md-4 col-sm-3 col-xs-12" for="email">Email: <span class="required">*</span>
+                        </label>
+                        <div class="col-md-8 col-sm-6 col-xs-12">
+                          <input type="email" id="email" name="email" data-validate-linked="email" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                       <div class="form-group">
+                          <label class="control-label col-md-4 col-sm-3 col-xs-12">Gender</label>
+                          <div class="col-md-6 col-sm-6 col-xs-12">
+                            <div id="gender" class="btn-group" data-toggle="buttons">
+                              <label class="btn btn-default" data-toggle-class="btn-success" data-toggle-passive-class="btn-default">
+                                <input type="radio" name="gender" value="male"> &nbsp; Male &nbsp;
+                              </label>
+                              <label class="btn btn-primary" data-toggle-class="btn-default" data-toggle-passive-class="btn-default">
+                                <input type="radio" name="gender" value="female"> Female
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+
+
+                        </form>
+
+                    </div>
+                      
+                             </div>
+                          </div>
+                        </div>
+                       </div><!--row--?
+
+                     </div><!--/modal body-->
+                  </div><!--/content-->
+                </div>
+            </div><!--/modal 2-->
+
+
+
+
 
             <!------------------------------------------------------Customer FORM------------>
             <div class = "modal fade" id ="addCust">
@@ -1092,6 +975,13 @@ if (isset($_POST['btnDeactivate']))
                                 </div>
                           </div>
                     </div>
+
+
+
+
+
+
+               
                       <!--Sencya kana pre Formula for monthly amortization 
 
                         MA = ((((BasePrice - Downpayment)*Interest Rate)*No of years) + BasePrice - Downpayment)) / (No.of years * 12)
@@ -1101,12 +991,38 @@ if (isset($_POST['btnDeactivate']))
                         pre magagamit mo tong formula :P :()
                       ---->
 
-
-
-<script src="easyWizard.js"></script>
-
-<script type="text/javascript">
-  $(document).on("ready", function(){
+ 
+    </div>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Easy Wizard</h4>
+                </div>
+                <div class="modal-body wizard-content">
+                    <div class="wizard-step">
+                        Step 1 <br>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam volutpat, neque in vehicula sodales, urna ex porttitor est, sed ultricies dolor urna nec orci. 
+                  </div>
+                    <div class="wizard-step">
+                        Step 2 <br>
+                        Duis ultrices massa eleifend volutpat tincidunt. Ut in turpis ultrices, scelerisque lacus at, ullamcorper elit. Aenean bibendum accumsan mi vulputate ullamcorper. Duis eget dui vulputate, imperdiet sapien in, ultricies velit. Integer facilisis tristique eros sed consectetur. Phasellus viverra non ipsum gravida tempus. Mauris tempor at sapien id sodales. Aliquam turpis dui, lacinia id dictum eu, rutrum eu elit. Curabitur placerat turpis lorem, id egestas urna fringilla in. Phasellus hendrerit, nisi pretium fermentum laoreet, urna augue cursus tellus, et sagittis lectus felis id lacus. Nam justo turpis, aliquam sed lectus in, convallis lobortis justo. In nulla tortor, varius id ligula et, bibendum blandit elit. Donec sit amet dui gravida ex volutpat commodo ac convallis lectus. Pellentesque quis eros vitae est semper ultrices vitae id libero.
+                  </div>
+                    <div class="wizard-step">
+                        Step 3 <br>
+                       Quisque luctus lacus a lacus ullamcorper posuere. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec neque diam, lobortis vitae justo ac, ullamcorper pellentesque libero. 
+                    </div>
+                </div>
+                <div class="modal-footer wizard-buttons">
+                    <!-- The wizard button will be inserted here. -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="easyWizard.js"></script>
+    <script>
+        $(document).on("ready", function(){
             $("#myModal").wizard({
         exitText: 'exit',
                 onfinish:function(){
@@ -1114,8 +1030,11 @@ if (isset($_POST['btnDeactivate']))
                 }
             });
         });
+    </script>
 
-</script>
+
+
+
 
 
                      </div><!--/modal body-->

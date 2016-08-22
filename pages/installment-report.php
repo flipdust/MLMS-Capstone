@@ -176,11 +176,6 @@ if (isset($_POST['btnArchive'])){
                                                     </thead>
                                                     
                                                     <tbody>
-                                                       <!-- <?php
-                                                            $view1 = new ashCrypt();
-                                                            $view1->viewAshCryptQuery();
-                                                            
-                                                             ?>-->
                                                        
                                                     </tbody>
                                                 </table>

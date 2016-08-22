@@ -1,56 +1,3 @@
-<?php
-
-require ("controller/connection.php");
-require('controller/viewdata.php');
-require('controller/createdata.php');
-require('controller/updatedata.php');
-require('controller/deactivate.php');
-require('controller/archivedata.php');
-require('controller/retrieve.php');
-
-
-if (isset($_POST['btnSubmit'])){
-
-    $tfServiceName = $_POST['tfServiceName'];
-    $tfServicePrice= $_POST['tfServicePrice'];
-    $tfStatus=$_POST['tfStatus'];
-    
-    $createService =  new createService();
-    $createService->Create($tfServiceName,$tfServicePrice,$tfStatus);
-}
-    
-if (isset($_POST['btnSave'])){
-
-    $tfServiceID = $_POST['tfServiceID'];
-    $tfServiceName = $_POST['tfServiceName'];
-    $tfServicePrice = $_POST['tfServicePrice'];
-    
-    
-    $updateservice =  new updateService();
-    $updateservice->update($tfServiceID,$tfServiceName,$tfServicePrice);
-}
-
-     
-      
-if (isset($_POST['btnDeactivate'])){
-
-    $tfServiceID = $_POST['tfServiceID'];
-    
-    $deactivateService =  new deactivateService();
-    $deactivateService->deactivate($tfServiceID);
-}
-
-if (isset($_POST['btnArchive'])){
-
-        $tfServiceID = $_POST['tfServiceID'];
-        
-        $archiveService =  new archiveService();
-        $archiveService->archive($tfServiceID);
-}
-    
-?>
-
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -88,7 +35,8 @@ if (isset($_POST['btnArchive'])){
 </head>
 
 <body class="nav-sm"> 
-    <div class="container body">
+
+<div class="container body">
         <div class="main_container">
             <?php require("sidemenu.php");
                   require("topnav.php");  ?>
@@ -196,6 +144,8 @@ if (isset($_POST['btnArchive'])){
     <script src="../vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
     <script src="../vendors/nprogress/nprogress.js"></script>
+    <!-- jQuery custom content scroller -->
+    <script src="../vendors/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js"></script>
 
     <!-- Datatables -->
     <script src="../vendors/datatables.net/js/jquery.dataTables.min.js"></script>
@@ -388,7 +338,13 @@ if (isset($_POST['btnArchive'])){
     </script>
     <!-- /Datatables -->
 
-     
+    <!-- Custom Theme Scripts -->
+    <script src="../build/js/custom.min.js"></script>
+
+     <script>
+        $('#tfPriceCreate').mask('000000000000.00',{reverse:true});
+        $('.tfPriceUpdate').mask('000000000000.00',{reverse:true});
+ </script>
 <!-- _____________________________________________M O D A L ___________________________-->
  <!--COLLECTION VIEW MODAL-->
  <!--ILIPAT NA LANG SA TRANSVIEW-->
@@ -575,5 +531,6 @@ if (isset($_POST['btnArchive'])){
                                 </div>
                             </div>
     </div>
-  </body>
-</html>
+
+
+    

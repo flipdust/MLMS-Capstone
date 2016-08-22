@@ -96,8 +96,8 @@ $(document).ready(function() {
             $SIDEBAR_MENU.find('li.active ul').hide();
             $SIDEBAR_MENU.find('li.active').addClass('active-sm').removeClass('active');
         } else {
-            $SIDEBAR_MENU.find('li.active-sm ul').show();
-            $SIDEBAR_MENU.find('li.active-sm').addClass('active').removeClass('active-sm');
+            $SIDEBAR_MENU.find('li.active-md ul').show();
+            $SIDEBAR_MENU.find('li.active-md').addClass('active').removeClass('active-sm');
         }
 
         $BODY.toggleClass('nav-md nav-sm');

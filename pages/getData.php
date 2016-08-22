@@ -1,7 +1,7 @@
 <?php
-	require("controller/connection.php");
-	
-	$fnName = $_GET['fnName'];
+    require("controller/connection.php");
+    
+    $fnName = $_GET['fnName'];
     switch ($fnName) {
         case 'getBlock':
             getBlock();
@@ -25,8 +25,8 @@
     }
 
     function getBlock() {
-    	$intSectionID = $_GET['intSectionID'];
-    	$sql = "Select * from tblBlock WHERE intStatus = 0 AND intSectionID = $intSectionID ORDER BY strBlockName ASC";
+        $intSectionID = $_GET['intSectionID'];
+        $sql = "Select * from tblBlock WHERE intStatus = 0 AND intSectionID = $intSectionID ORDER BY strBlockName ASC";
         $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
         mysql_select_db(constant('mydb'));
         $result = mysql_query($sql,$conn);
@@ -35,25 +35,47 @@
             $intBlockID = $row['intBlockID']; 
             $strBlockName = $row['strBlockName'];
             $intNoOfLot = $row['intNoOfLot'];
+            $intTypeID = $row['intTypeID'];
             //$intStatus = $row['intStatus']; 
-        	echo "$intBlockID,$strBlockName,$intNoOfLot";
+            $sql2 = "Select * from tbltypeoflot WHERE intTypeID = $intTypeID";
+            $conn2 = mysql_connect(constant('server'),constant('user'),constant('pass'));
+            mysql_select_db(constant('mydb'));
+            $result2 = mysql_query($sql2,$conn2);
+            $dblSellingPrice = 0;
+            if($row2 = mysql_fetch_array($result2)){
+                $dblSellingPrice = $row2['dblSellingPrice'];
+            }
+            mysql_close($conn2);
+            echo "$intBlockID,$strBlockName,$intNoOfLot,$dblSellingPrice";
         }
 
         while($row = mysql_fetch_array($result)){
-                    
             $intBlockID = $row['intBlockID']; 
             $strBlockName = $row['strBlockName'];
             $intNoOfLot = $row['intNoOfLot'];
-            //$intStatus = $row['intStatus']; 
-
-            echo ",intBlockID,$strBlockName,$intNoOfLot";
+            $intTypeID = $row['intTypeID'];
+            //$intStatus = $row['intStatus'];
+            $sql2 = "Select * from tbltypeoflot WHERE intTypeID = $intTypeID";
+            $conn2 = mysql_connect(constant('server'),constant('user'),constant('pass'));
+            mysql_select_db(constant('mydb'));
+            $result2 = mysql_query($sql2,$conn2);
+            $dblSellingPrice = 0;
+            if($row2 = mysql_fetch_array($result2)){
+                $dblSellingPrice = $row2['dblSellingPrice'];
+            }
+            mysql_close($conn2);
+            echo ",$intBlockID,$strBlockName,$intNoOfLot,$dblSellingPrice";
         }
-        mysql_close($conn);
+        //mysql_close($conn);
+    }
+
+    function getPrice($intTypeID) {
+        
     }
 
     function getLot() {
-    	$intBlockID = $_GET['intBlockID'];
-    	$sql = "Select * from tblLot WHERE intStatus = 0 AND intBlockID = $intBlockID ORDER BY strLotName ASC";
+        $intBlockID = $_GET['intBlockID'];
+        $sql = "Select * from tblLot WHERE intStatus = 0 AND intBlockID = $intBlockID ORDER BY strLotName ASC";
         $conn = mysql_connect(constant('server'),constant('user'),constant('pass'));
         mysql_select_db(constant('mydb'));
         $result = mysql_query($sql,$conn);
@@ -63,7 +85,7 @@
             $strLotName = $row['strLotName'];
             $intLotStatus = $row['intLotStatus'];
             //$intStatus = $row['intStatus']; 
-        	echo "$intLotID,$strLotName,$intLotStatus";
+            echo "$intLotID,$strLotName,$intLotStatus";
         }
 
         while($row = mysql_fetch_array($result)){
