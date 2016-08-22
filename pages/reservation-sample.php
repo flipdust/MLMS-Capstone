@@ -540,8 +540,7 @@ if (isset($_POST['btnDeactivate']))
     <script src="../vendors/starrr/dist/starrr.js"></script>
      <!-- jQuery Smart Wizard -->
     <script src="../vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js"></script>
-    
-    <script src="../vendor/jQuery-Smart-Wizard/js/jquery-1.7.1.min.js"></script>
+    <script type="../vendor/jQuery-Smart-Wizard/js/jquery-1.7.1.min.js"></script>
 
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
@@ -959,72 +958,25 @@ if (isset($_POST['btnDeactivate']))
 
                         </form>
                       <div id="step-33">
+
                         <h2 class="StepTitle">Step 3 Content</h2>
+                        <div class="panel panel-default">
+                                <div class="panel-body">
 
-                          <form class="form-horizontal form-label-left">
-
-                          <div class="clearfix"></div>
-
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                          <div class="x_panel">
-                            <div class="x_title">
-                              <h2>Unit List</h2>
-                              <ul class="nav navbar-right panel_toolbox">
-                                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                                </li>
-                                </li>
-                              </ul>
-                              <div class="clearfix"></div>
-                            </div>
-
-                  <div class="x_content">
-
-                    <div class="table-responsive">
-                      <table class="table table-striped jambo_table bulk_action">
-                        <thead>
-                          <tr class="headings">
+                                <div class="form-group col-md-7">
                         
-                            <th class="column-title">Unit ID</th>
-                            <th class="column-title">Unit Details</th>
-                            <th class="column-title">Years to pay</th>
-                            <th class="column-title">Price</th>
-                            <th class="column-title">Discounted Price </th>
-                            <th class="column-title">Monthly</th>
-                            <th class="column-title no-link last"><span class="nobr">Action</span>
-                            </th>
-                            <th class="bulk-actions" colspan="7">
-                              <a class="antoo" style="color:#fff; font-weight:500;">Bulk Actions ( <span class="action-cnt"> </span> ) <i class="fa fa-chevron-down"></i></a>
-                            </th>
-                          </tr>
-                        </thead>
-
-                        <tbody>
-                          <tr class="even pointer">
-                            
-                            <td class=" ">Unit No.1</td>
-                            <td class=" "><button data-target="#popUpWindow" data-toggle="modal">View</button><i class="success fa fa-long-arrow-up"></i></td>
-                            <td class=" "><select class="form-control">
-                                              <option>1</option>
+                                          <div class="col-md-6 col-sm-9 col-xs-12">
+                                            <select class="form-control">
+                                              <option>Mode of Payment</option>
+                                              <option>Cash</option>
+                                              <option>Cheque</option>
                                             </select>
-                                          </div></td>
-                            <td class=" ">P76,230.00</td>
-                            <td class="a-right a-right ">P9,147.60</td>
-                            <td class=" ">P6,352.50</td>
-                            <td class=" last"><a href="#"><button>Remove</button></a>
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                  </div>
+                                          </div>
 
-
-
-                          </form>
-
-
-                       
+                                               <button>Cheque Details</button>  
+                                      </div>
+                                    </div>
+                                    </div>
 
                       </div>
                       <div id="step-44">

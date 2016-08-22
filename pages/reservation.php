@@ -298,11 +298,6 @@ if (isset($_POST['btnDeactivate']))
                 $('#tableBody').append("<tr><td>"+intNoUnit+++"</td><td><a class='btn btn-round btn-info' lotID='"+lotID+"' onclick='view(this);'><i class='fa fa-eye'></i> View</a></td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>");
               });
 
-              $('a').on('mousedown', function(){alert("sada"); 
-                //displayLot($(this).attr('lotID'));
-                alert("view");
-              });
-
               $('#removeunit').on('click', function(){
                 $('#btnBill').show();
                 $('#popUpWindow').modal('hide');
@@ -433,7 +428,7 @@ if (isset($_POST['btnDeactivate']))
 
                                     <!-- bill hide untol not adding a unit-->
                                              <div class="form-group" >
-                                                <button id="btnBill" type="button" style="display:none" class="btn btn-success btn-lg col-md-6" data-toggle="modal" data-target="#myModal" ><span class="glyphicon glyphicon-credit-card" aria-hidden="true" ></span> BILL OUT
+                                                <button id="btnBill" type="button" style="display:none;" class="btn btn-success btn-lg col-md-6" data-toggle="modal" data-target="#myModal" ><span class="glyphicon glyphicon-credit-card" aria-hidden="true" ></span> BILL OUT
                                                     </button>
                                             </div>
 
