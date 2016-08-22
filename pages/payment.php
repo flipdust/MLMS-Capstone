@@ -8,46 +8,48 @@ require('controller/deactivate.php');
 require('controller/archivedata.php');
 require('controller/retrieve.php');
 
-
 if (isset($_POST['btnSubmit'])){
 
-    $tfServiceName = $_POST['tfServiceName'];
-    $tfServicePrice= $_POST['tfServicePrice'];
-    $tfStatus=$_POST['tfStatus'];
-    
-    $createService =  new createService();
-    $createService->Create($tfServiceName,$tfServicePrice,$tfStatus);
+        $serviceName = $_POST['serviceName'];
+		$tfDescription = $_POST['tfDescription'];
+		$tfPercent = $_POST['tfPercent'];
+		$tfStatus = $_POST['tfStatus'];
+		 
+        $tfPercentValue = $tfPercent/100;
+		
+		$createDiscount =  new createDiscount();
+		$createDiscount->Create($serviceName,$tfDescription,$tfPercentValue,$tfStatus);
 }
-    
+	  
 if (isset($_POST['btnSave'])){
 
-    $tfServiceID = $_POST['tfServiceID'];
-    $tfServiceName = $_POST['tfServiceName'];
-    $tfServicePrice = $_POST['tfServicePrice'];
-    
-    
-    $updateservice =  new updateService();
-    $updateservice->update($tfServiceID,$tfServiceName,$tfServicePrice);
+		$tfDiscountID = $_POST['tfDiscountID'];
+		$tfDescription = $_POST['tfDescription'];
+		$tfPercent = $_POST['tfPercent'];
+		
+        $tfPercentValue = $tfPercent/100;
+		
+		$updateDiscount =  new updateDiscount();
+		$updateDiscount->update($tfDiscountID,$tfDescription,$tfPercentValue);
 }
-
-     
+	   
       
 if (isset($_POST['btnDeactivate'])){
 
-    $tfServiceID = $_POST['tfServiceID'];
-    
-    $deactivateService =  new deactivateService();
-    $deactivateService->deactivate($tfServiceID);
+		$tfDiscountID = $_POST['tfDiscountID'];
+		
+		$deactivateDiscount =  new deactivateDiscount();
+		$deactivateDiscount->deactivate($tfDiscountID);
 }
 
 if (isset($_POST['btnArchive'])){
 
-        $tfServiceID = $_POST['tfServiceID'];
+        $tfDiscountID = $_POST['tfDiscountID'];
         
-        $archiveService =  new archiveService();
-        $archiveService->archive($tfServiceID);
+        $archiveDiscount =  new archiveDiscount();
+        $archiveDiscount->archive($tfDiscountID);
 }
-    
+
 ?>
 
 
@@ -85,9 +87,32 @@ if (isset($_POST['btnArchive'])){
     <link href="../vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 
 
+
+    <script>
+        function validateServiceName(evt) {
+                evt = (evt) ? evt : window.event;
+                var charCode = (evt.which) ? evt.which : evt.keyCode;
+                if (charCode == 8 || charCode == 32 || (charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)){
+                return true;
+                }else{
+                return false;
+                }
+            }
+            
+        function validateNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode == 8 || (charCode >= 48 && charCode <= 57)){
+            return true;
+            }else{
+            return false;
+            }
+        }
+        
+    </script>
 </head>
 
-<body class="nav-sm"> 
+<body class="nav-sm">
     <div class="container body">
         <div class="main_container">
             <?php require("sidemenu.php");
@@ -97,84 +122,80 @@ if (isset($_POST['btnArchive'])){
             <div class="right_col" role="main">
                 <div class = "row">
                     <div class="col-md-12">
-                        <div class="panel panel-success ">
+                        <div class="panel panel-success">
                             <div class="panel-heading">
-                                <h1><b>PAYMENT</b></h1>
+                                <H1><b>PAYMENT</b></H2>
                             </div><!-- /.panel-heading -->
                      
                             <div class="panel-body">
-                                <div class="col-md-6">
-                                   <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h4><b>Customer Collection<b></h4>
-                                        </div><!-- /.panel-heading -->
-                                           
-                                    <div class="panel-body">
-                                        <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
-                                            <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                                                    <thead>
-                                                            <tr>
-                                                                
-                                                                <th class = "success" style = "text-align: center;">Customer Name</th>
-                                                            
-                                                                <th class = "success" style = "text-align: center;">Action</th>
-                                                    
-                                                            </tr>
-                                                        </thead>
-                                                            <td>Daniella Soriano</td>
-                                                            <td align='center'>
-                                <button type = "button" class = "btn btn-success" data-toggle = "modal" title='Collection' data-target = '#viewCollection'>
-                                <i class='glyphicon glyphicon-eye-open'> VIEW</i></button>
-
-                          </td>
-                                                        <tbody>
-                                                           
-                                                            
-                                                        </tbody>
-                                                </table>
-                                            </div><!-- /.table-responsive -->
-                                        </div><!--panel body -->
-                                    </div><!--panel panel-success-->
-                                 
-                                </div><!--col-md-6 column-->
-<!-- ________________________________________________________________________________-->
-                             <div class="col-md-6">
-                                   <div class="panel panel-default">
-                                        <div class="panel-heading">
-                                            <h4><b>Customer Downpayment<b></h4>
-                                        </div><!-- /.panel-heading -->
-                                           
-                                    <div class="panel-body">
-                                        <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
-                                            <table id="datatable1-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                                                    <thead>
-                                                            <tr>
-                                                                
-                                                                <th class = "success" style = "text-align: center;">Customer Name</th>
-                                                            
-                                                                <th class = "success" style = "text-align: center;">Action</th>
-                                                    
-                                                            </tr>
-                                                        </thead>
-                                                        
-                                                        <tbody>
-                                                           <td>Daniella Soriano</td>
-                                                              <td align='center'>
-                                <button type = "button" class = "btn btn-success" data-toggle = "modal" title='Collection' data-target = '#viewDownpayment'>
-                                <i class='glyphicon glyphicon-eye-open'> VIEW</i></button>
-                                                        </tbody>
-                                                </table>
-                                            </div><!-- /.table-responsive -->
-                                        </div><!--panel body -->
-                                    </div><!--panel panel-success-->
-                                 
-                                </div><!--col-md-6 column-->
                     
+                    <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                      <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#tab_content1" id="collection-tab" role="tab" data-toggle="tab" aria-expanded="true">Customer Collection</a>
+                        </li>
+                        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="downpayment-tab" data-toggle="tab" aria-expanded="false">Customer Downpayment</a>
+                        </li>
+                        
+                      </ul>
+                      <div id="myTabContent" class="tab-content">
+                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="collection-tab">
+                          <div class="panel-body">          
+                                            <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
+                                                <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                                        <thead>
+                                                                <tr>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Customer Name</th>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Action</th>
+                                                                   
+                                                                </tr>
+                                                        </thead>
+                                                
+                                                        <tbody>
+                                                          <td>Daniella Soriano</td>
+                                                          <td align='center'>
+                                                            <button type = 'button' class = 'btn btn-success' data-toggle = 'modal' title='Edit' data-target = '#viewCollection'>
+                                                            <i class='glyphicon glyphicon-eye-open'> VIEW</i></button>
+                                                            </td>
+                                                         
+                                                        </tbody>
+                                                </table>
+                                            </div><!-- /.table-responsive -->
                             </div><!--panel body -->
-                        </div><!--panel panel-success-->
-                    </div><!--col-md-12-->
-                </div><!--row-->
-            </div><!-- /page content -->
+                        </div>
+                        <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="downpayment-tab">
+                          <div class="panel-body">          
+                                            <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
+                                                <table id="datatable-responsive1dp" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                                        <thead>
+                                                                <tr>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Customer Name</th>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Action</th>
+                                                                   
+                                                                </tr>
+                                                        </thead>
+                                                
+                                                        <tbody>
+                                                          <td>Daniella Soriano</td>
+                                                          <td align='center'>
+                                                            <button type = 'button' class = 'btn btn-success' data-toggle = 'modal' title='Edit' data-target = '#viewDownpayment'>
+                                                            <i class='glyphicon glyphicon-eye-open'> VIEW</i></button>
+                                                            </td>
+                                                         
+                                                        </tbody>
+                                                </table>
+                                            </div><!-- /.table-responsive -->
+                            </div><!--panel body -->
+                        </div>
+                        
+                      </div>
+                    </div><!--TAB-->
+  
+                
+                        </div><!--panel body -->
+                    </div><!--panel panel-success-->
+                </div><!--col-md-12-->
+            </div><!--row-->
+        </div><!-- /page content -->
 
         <!-- footer content -->
         <footer>
@@ -187,7 +208,286 @@ if (isset($_POST['btnArchive'])){
         </div><!-- main_container -->
     </div><!-- container body -->
 
+ <!--VIEW COLLECTION MODAL-->
+                            <div class = 'modal fade' id = 'viewCollection'>
+                            <div class = 'modal-dialog' style = 'width: 60%;'>
+                                <div class = 'modal-content' style = 'height: 320px;'>
+                                                
+                                                    <!--header-->
+                                        <div class = 'modal-header'>
+                                            <button type = 'button' class = 'close' data-dismiss = 'modal'>&times;</button>
+                                            <h3 class = 'modal-title'>Collection: (Name of customer)</h3>
+                                        </div>
+                                                    
+                                                    <!--body (form)-->
+                                        <div class = 'modal-body'>
+                                            <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
+                                                <table id="datatable-responsive2col" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                                        <thead>
+                                                                <tr>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Transaction code</th>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Unit</th>
+                                                                   <th class = "success" style = "text-align: center; font-size: 20px;">Action</th>                                                                 
+                                                                </tr>
+                                                        </thead>
+                                                
+                                                        <tbody>
+                                                          <td>Collection 1</td>
+                                                          <td>Unit 1</td>
+                                                          <td align='center'>
+                                                            <button type = 'button' class = 'btn btn-success' data-toggle = 'modal' title='Edit' data-target = '#collectCollection'>
+                                                            <i class='glyphicon glyphicon-folder-open'> COLLECT</i></button>
+                                                            </td>
+                                                         
+                                                        </tbody>
+                                                </table>
+                                            </div><!-- /.table-responsive -->
+                                           
+                                    </div><!-- content-->
+                                </div>
+                            </div>
+                        </div>
 
+     <!--COLLECT COLLECTION MODAL-->
+                            <div class = 'modal fade' id = 'collectCollection'>
+                            <div class = 'modal-dialog' style = 'width: 60%;'>
+                                <div class = 'modal-content' style = 'height: 520px;'>
+                                                
+                                                    <!--header-->
+                                        <div class = 'modal-header'>
+                                            <button type = 'button' class = 'close' data-dismiss = 'modal'>&times;</button>
+                                            
+                                        </div>
+                                                    
+                                                    <!--body (form)-->
+                                        <div class = 'modal-body'>
+                                             
+                                            
+                                            <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
+                                                <table id="datatable-responsive3col" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                                        <thead>
+                                                                <tr>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;"><input type="checkbox" name="" value="null"></th>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Due Date</th>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Transaction Date</th>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Penalty</th> 
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Payment</th> 
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Status</th> 
+                                                                                                                                   
+                                                                </tr>
+                                                        </thead>
+                                                
+                                                        <tbody>
+                                                          
+                                                        </tbody>
+                                                </table>
+                                            </div><!-- /.table-responsive -->
+                                                                                   
+                                    </div><!-- content-->
+                                     <div class="form-group modal-footer">
+                                                   
+                                                    
+                                                    <div class="col-md-8 col-md-6">
+                                                        <button type = 'button' class="btn btn-success col-md-3" data-toggle = 'modal' title='Edit' data-target = '#payCollection'>PAY</button>
+                                                        <button type="close" data-dismiss="modal"  class="btn btn-success col-md-3" name= "btnCancel">CANCEL</button>
+                                                        
+                                                    </div>
+                                                   
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+    <!--PAY COLLECTION MODAL-->
+                            <div class = 'modal fade' id = 'payCollection'>
+                            <div class = 'modal-dialog' style = 'width: 60%;'>
+                                <div class = 'modal-content' style = 'height: 520px;'>
+                                                
+                                                    <!--header-->
+                                        <div class = 'modal-header'>
+                                            <button type = 'button' class = 'close' data-dismiss = 'modal'>&times;</button>
+                                            
+                                        </div>
+                                                    
+                                                    <!--body (form)-->
+                                        <div class = 'modal-body'>
+                                             
+                                             <div class="form-group">
+                                                  <form class="form-horizontal" role="form" action = "payment.php" method= "post">
+                                                <div class="form-group">
+                                                    <label class="col-md-5" style = " font-size: 14px;" align="right" style="margin-top:.30em">Total Amount to Pay:</label>
+                                                    <div class="col-md-5">
+                                                      <input type="text" class="form-control input-md" name="totalCollection" onkeypress='return validateNumber(event)' disabled />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-5" style = " font-size: 14px;" align="right" style="margin-top:.30em">Mode of Payment:</label>
+                                                    <div class="col-md-5">
+                                                        <select class="form-control" name = "modePayment"  required>
+                                                            <option value="">Cash</option>
+                                                             <option value="">Cheque</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                 <div class="form-group">
+                                                    <label class="col-md-5" style = " font-size: 14px;" align="right" style="margin-top:.30em">Amount Paid:</label>
+                                                    <div class="col-md-5">
+                                                      <input type="number" class="form-control input-md" name="downpaymentAmtPaid" onkeypress='return validateNumber(event)' required/>
+                                                    </div>
+                                                </div>
+
+                                                </form>
+                                            </div><!--form control-->
+
+                                            <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
+                                                <table id="datatable-responsive3col" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                                        <thead>
+                                                                <tr>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Due Date</th>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Penalty</th>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Payment</th> 
+                                                                                                                                   
+                                                                </tr>
+                                                        </thead>
+                                                
+                                                        <tbody>
+                                                          
+                                                        </tbody>
+                                                </table>
+                                            </div><!-- /.table-responsive -->
+                                                                                   
+                                    </div><!-- content-->
+                                    <div class="form-group modal-footer">
+                                                   
+                                                    
+                                                    <div class="col-md-8 col-md-6">
+                                                        <button type = 'submit' class="btn btn-success col-md-3" data-dismiss="modal">SUBMIT</button>
+                                                        <button type="close" data-dismiss="modal"  class="btn btn-success col-md-3" name= "btnCancel">CANCEL</button>
+                                                        
+                                                    </div>
+                                                   
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+    <!--VIEW DOWNPAYMENT MODAL-->
+                            <div class = 'modal fade' id = 'viewDownpayment'>
+                            <div class = 'modal-dialog' style = 'width: 60%;'>
+                                <div class = 'modal-content' style = 'height: 320px;'>
+                                                
+                                                    <!--header-->
+                                        <div class = 'modal-header'>
+                                            <button type = 'button' class = 'close' data-dismiss = 'modal'>&times;</button>
+                                            <h3 class = 'modal-title'>Downpayment: (Name of customer)</h3>
+                                        </div>
+                                                    
+                                                    <!--body (form)-->
+                                        <div class = 'modal-body'>
+                                            <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
+                                                <table id="datatable-responsive2dp" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                                        <thead>
+                                                                <tr>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Transaction code</th>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Unit</th>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Balance</th> 
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Due Date</th>   
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Action</th>                                                                 
+                                                                </tr>
+                                                        </thead>
+                                                
+                                                        <tbody>
+                                                          <td>Downpayment 1</td>
+                                                          <td>Unit 1</td>
+                                                          <td>9.00</td>
+                                                          <td>September 30, 2016</td>
+                                                          <td align='center'>
+                                                            <button type = 'button' class = 'btn btn-success' data-toggle = 'modal' title='Edit' data-target = '#collectDownpayment'>
+                                                            <i class='glyphicon glyphicon-folder-open'> COLLECT</i></button>
+                                                            </td>
+                                                         
+                                                        </tbody>
+                                                </table>
+                                            </div><!-- /.table-responsive -->
+                                           
+                                    </div><!-- content-->
+                                </div>
+                            </div>
+                        </div>
+
+ <!--COLLECT DOWNPAYMENT MODAL-->
+                            <div class = 'modal fade' id = 'collectDownpayment'>
+                            <div class = 'modal-dialog' style = 'width: 60%;'>
+                                <div class = 'modal-content' style = 'height: 520px;'>
+                                                
+                                                    <!--header-->
+                                        <div class = 'modal-header'>
+                                            <button type = 'button' class = 'close' data-dismiss = 'modal'>&times;</button>
+                                            
+                                        </div>
+                                                    
+                                                    <!--body (form)-->
+                                        <div class = 'modal-body'>
+                                             
+                                             <div class="form-group">
+                                                  <form class="form-horizontal" role="form" action = "payment.php" method= "post">
+                                                <div class="form-group">
+                                                    <label class="col-md-5" style = " font-size: 14px;" align="right" style="margin-top:.30em">Balance:</label>
+                                                    <div class="col-md-5">
+                                                      <input type="text" class="form-control input-md" name="downpaymentBal" onkeypress='return validateNumber(event)' disabled />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="col-md-5" style = " font-size: 14px;" align="right" style="margin-top:.30em">Mode of Payment:</label>
+                                                    <div class="col-md-5">
+                                                        <select class="form-control" name = "modePayment"  required>
+                                                            <option value="">Cash</option>
+                                                             <option value="">Cheque</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                 <div class="form-group">
+                                                    <label class="col-md-5" style = " font-size: 14px;" align="right" style="margin-top:.30em">Amount Paid:</label>
+                                                    <div class="col-md-5">
+                                                      <input type="number" class="form-control input-md" name="downpaymentAmtPaid" onkeypress='return validateNumber(event)' required/>
+                                                    </div>
+                                                </div>
+
+                                                </form>
+                                            </div><!--form control-->
+
+                                            <div class="table-responsive col-md-12 col-lg-12 col-xs-12">
+                                                <table id="datatable-responsive3dp" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                                        <thead>
+                                                                <tr>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Date</th>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Transaction Code</th>
+                                                                    <th class = "success" style = "text-align: center; font-size: 20px;">Payment</th> 
+                                                                                                                                   
+                                                                </tr>
+                                                        </thead>
+                                                
+                                                        <tbody>
+                                                          
+                                                        </tbody>
+                                                </table>
+                                            </div><!-- /.table-responsive -->
+                                                                                   
+                                    </div><!-- content-->
+                                    <div class="form-group modal-footer">
+                                                   
+                                                    
+                                                    <div class="col-md-8 col-md-6">
+                                                        <button type = 'submit' class="btn btn-success col-md-3" data-dismiss="modal">SUBMIT</button>
+                                                        <button type="close" data-dismiss="modal"  class="btn btn-success col-md-3" name= "btnCancel">CANCEL</button>
+                                                        
+                                                    </div>
+                                                   
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                        
     <!-- jQuery -->
     <script src="../vendors/jquery/dist/jquery.min.js"></script>
     <!-- Bootstrap -->
@@ -214,7 +514,7 @@ if (isset($_POST['btnArchive'])){
     <script src="../vendors/datatables.net-scroller/js/datatables.scroller.min.js"></script>
     <script src="../vendors/jszip/dist/jszip.min.js"></script>
     <script src="../vendors/pdfmake/build/pdfmake.min.js"></script>
-    <script src="../vendors/pdfmake/build/vfs_fonts.js"></script>
+    <script src="../vendors/pdfmake/build/vfs_fonts.js"></script>    
     <script src="../vendors/mask/jquery.mask.min.js"></script>
 
 
@@ -300,20 +600,11 @@ if (isset($_POST['btnArchive'])){
     </script>
     <!-- /Datatables -->
 
-    <!-- Custom Theme Scripts -->
-    <script src="../build/js/custom.min.js"></script>
-
-     <script>
-        $('#tfPriceCreate').mask('000000000000.00',{reverse:true});
-        $('.tfPriceUpdate').mask('000000000000.00',{reverse:true});
- </script>
-
-<!--DATATABLE1-->
-  <script>
+    <script>
       $(document).ready(function() {
         var handleDataTableButtons = function() {
-          if ($("#datatable1-buttons").length) {
-            $("#datatable1-buttons").DataTable({
+          if ($("#datatable-buttons").length) {
+            $("#datatable-buttons").DataTable({
               dom: "Bfrtip",
               buttons: [
                 {
@@ -351,13 +642,13 @@ if (isset($_POST['btnArchive'])){
           };
         }();
 
-        $('#datatable1').dataTable();
+        $('#datatable').dataTable();
 
-        $('#datatable1-keytable').DataTable({
+        $('#datatable-keytable').DataTable({
           keys: true
         });
 
-        $('#datatable1-responsive').DataTable();
+        $('#datatable-responsive1dp').DataTable();
 
         $('#datatable-scroller').DataTable({
           ajax: "controller/viewdata/php",
@@ -367,11 +658,11 @@ if (isset($_POST['btnArchive'])){
           scroller: true
         });
 
-        $('#datatable1-fixed-header').DataTable({
+        $('#datatable-fixed-header').DataTable({
           fixedHeader: true
         });
 
-        var $datatable = $('#datatable1-checkbox');
+        var $datatable = $('#datatable-checkbox');
 
         $datatable.dataTable({
           'order': [[ 1, 'asc' ]],
@@ -390,198 +681,336 @@ if (isset($_POST['btnArchive'])){
     </script>
     <!-- /Datatables -->
 
+ <script>
+      $(document).ready(function() {
+        var handleDataTableButtons = function() {
+          if ($("#datatable-buttons").length) {
+            $("#datatable-buttons").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "excel",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "pdfHtml5",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "print",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+            });
+          }
+        };
+
+        TableManageButtons = function() {
+          "use strict";
+          return {
+            init: function() {
+              handleDataTableButtons();
+            }
+          };
+        }();
+
+        $('#datatable').dataTable();
+
+        $('#datatable-keytable').DataTable({
+          keys: true
+        });
+
+        $('#datatable-responsive2dp').DataTable({bFilter: false, bInfo: false});
+
+        $('#datatable-scroller').DataTable({
+          ajax: "controller/viewdata/php",
+          deferRender: true,
+          scrollY: 380,
+          scrollCollapse: true,
+          scroller: true
+        });
+
+        $('#datatable-fixed-header').DataTable({
+          fixedHeader: true
+        });
+
+        var $datatable = $('#datatable-checkbox');
+
+        $datatable.dataTable({
+          'order': [[ 1, 'asc' ]],
+          'columnDefs': [
+            { orderable: false, targets: [0] }
+          ]
+        });
+        $datatable.on('draw.dt', function() {
+          $('input').iCheck({
+            checkboxClass: 'icheckbox_flat-green'
+          });
+        });
+
+
+        TableManageButtons.init();
+      });
+    </script>
+    <!-- /Datatables -->
+     <script>
+      $(document).ready(function() {
+        var handleDataTableButtons = function() {
+          if ($("#datatable-buttons").length) {
+            $("#datatable-buttons").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "excel",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "pdfHtml5",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "print",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+            });
+          }
+        };
+
+        TableManageButtons = function() {
+          "use strict";
+          return {
+            init: function() {
+              handleDataTableButtons();
+            }
+          };
+        }();
+
+        $('#datatable').dataTable();
+
+        $('#datatable-keytable').DataTable({
+          keys: true
+        });
+
+        $('#datatable-responsive3dp').DataTable({bFilter: false, bInfo: false, autoWidth: false});
+
+        $('#datatable-scroller').DataTable({
+          ajax: "controller/viewdata/php",
+          deferRender: true,
+          scrollY: 380,
+          scrollCollapse: true,
+          scroller: true
+        });
+
+        $('#datatable-fixed-header').DataTable({
+          fixedHeader: true
+        });
+
+        var $datatable = $('#datatable-checkbox');
+
+        $datatable.dataTable({
+          'order': [[ 1, 'asc' ]],
+          'columnDefs': [
+            { orderable: false, targets: [0] }
+          ]
+        });
+        $datatable.on('draw.dt', function() {
+          $('input').iCheck({
+            checkboxClass: 'icheckbox_flat-green'
+          });
+        });
+
+
+        TableManageButtons.init();
+      });
+    </script>
+    <!--/Datatables-->
+
+     <script>
+      $(document).ready(function() {
+        var handleDataTableButtons = function() {
+          if ($("#datatable-buttons").length) {
+            $("#datatable-buttons").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "excel",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "pdfHtml5",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "print",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+            });
+          }
+        };
+
+        TableManageButtons = function() {
+          "use strict";
+          return {
+            init: function() {
+              handleDataTableButtons();
+            }
+          };
+        }();
+
+        $('#datatable').dataTable();
+
+        $('#datatable-keytable').DataTable({
+          keys: true
+        });
+
+        $('#datatable-responsive2col').DataTable({bFilter: false, bInfo: false});
+
+        $('#datatable-scroller').DataTable({
+          ajax: "controller/viewdata/php",
+          deferRender: true,
+          scrollY: 380,
+          scrollCollapse: true,
+          scroller: true
+        });
+
+        $('#datatable-fixed-header').DataTable({
+          fixedHeader: true
+        });
+
+        var $datatable = $('#datatable-checkbox');
+
+        $datatable.dataTable({
+          'order': [[ 1, 'asc' ]],
+          'columnDefs': [
+            { orderable: false, targets: [0] }
+          ]
+        });
+        $datatable.on('draw.dt', function() {
+          $('input').iCheck({
+            checkboxClass: 'icheckbox_flat-green'
+          });
+        });
+
+
+        TableManageButtons.init();
+      });
+    </script>
+    <!-- /Datatables -->
+     <!--/Datatables-->
+
+     <script>
+      $(document).ready(function() {
+        var handleDataTableButtons = function() {
+          if ($("#datatable-buttons").length) {
+            $("#datatable-buttons").DataTable({
+              dom: "Bfrtip",
+              buttons: [
+                {
+                  extend: "copy",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "csv",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "excel",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "pdfHtml5",
+                  className: "btn-sm"
+                },
+                {
+                  extend: "print",
+                  className: "btn-sm"
+                },
+              ],
+              responsive: true
+            });
+          }
+        };
+
+        TableManageButtons = function() {
+          "use strict";
+          return {
+            init: function() {
+              handleDataTableButtons();
+            }
+          };
+        }();
+
+        $('#datatable').dataTable();
+
+        $('#datatable-keytable').DataTable({
+          keys: true
+        });
+
+        $('#datatable-responsive3col').DataTable({bFilter: false, bInfo: false, bPaginate: false});
+
+        $('#datatable-scroller').DataTable({
+          ajax: "controller/viewdata/php",
+          deferRender: true,
+          scrollY: 380,
+          scrollCollapse: true,
+          scroller: true
+        });
+
+        $('#datatable-fixed-header').DataTable({
+          fixedHeader: true
+        });
+
+        var $datatable = $('#datatable-checkbox');
+
+        $datatable.dataTable({
+          'order': [[ 1, 'asc' ]],
+          'columnDefs': [
+            { orderable: false, targets: [0] }
+          ]
+        });
+        $datatable.on('draw.dt', function() {
+          $('input').iCheck({
+            checkboxClass: 'icheckbox_flat-green'
+          });
+        });
+
+
+
+        TableManageButtons.init();
+      });
+    </script>
+    <!-- /Datatables -->
     <!-- Custom Theme Scripts -->
     <script src="../build/js/custom.min.js"></script>
 
-     <script>
-        $('#tfPriceCreate').mask('000000000000.00',{reverse:true});
-        $('.tfPriceUpdate').mask('000000000000.00',{reverse:true});
- </script>
-<!-- _____________________________________________M O D A L ___________________________-->
- <!--COLLECTION VIEW MODAL-->
- <!--ILIPAT NA LANG SA TRANSVIEW-->
-  <div class = 'modal fade' id = 'viewCollection'>
-                            <div class = 'modal-dialog' style = 'width: 50%;'>
-                                <div class = 'modal-content' style = ''>
-                                                
-                                                    <!--header-->
-                                        <div class = 'modal-header' style='background:#b3ffb3;'>
-                                              <button type = 'button' class = 'close' data-dismiss = 'modal'>&times;</button>
-                                            <h2 class = 'modal-title'>Collection: (NAME OF CUSTOMER)</h2>
-                                        </div>
-
-                                        <div class="modal-body">
-                                        
-                                            <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                                                    <thead>
-                                                            <tr>
-                                                                
-                                                                <th class = "success" style = "text-align: center;">Transaction Code</th>
-                                                                <th class = "success" style = "text-align: center;">Unit Code</th>
-                                                            
-                                                                <th class = "success" style = "text-align: center;">Action</th>
-                                                    
-                                                            </tr>
-                                                        </thead>
-                                                        
-                                                        <tbody>
-                                                           <td>Transcode 1</td>
-                                                           <td>Unit 1</td>
-                                                            <td align='center'>
-                                <button type = "button" class = "btn btn-success" data-toggle = "modal" title='popUpCollection' data-target = '#popUpCollection'>
-                                <i class='glyphicon glyphicon-folder-open'> COLLECT</i></button>
-                                                            
-                                                        </tbody>
-                                                </table>
-                                           
-                                        </div>
-
-
-                                </div>
-                            </div>
-    </div>
-    <!--COLLECTION VIEW MODAL-->
- <!--ILIPAT NA LANG SA TRANSVIEW-->
-  <div class = 'modal fade' id = 'popUpCollection'>
-                            <div class = 'modal-dialog' style = 'width: 80%;'>
-                                <div class = 'modal-content' style = ''>
-                                                
-                                        <div class="modal-body">
-                                        
-                                            <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                                                    <thead>
-                                                            <tr>
-                                                                <th><input type="checkbox" name="select_all" value="1" id="example-select-all"></th>
-                                                                <th class = "success" style = "text-align: center;">Due Date</th>
-                                                                <th class = "success" style = "text-align: center;">Transaction Date</th>
-                                                            
-                                                                <th class = "success" style = "text-align: center;">Penalty</th>
-                                                                 <th class = "success" style = "text-align: center;">Payment</th>
-                                                                  <th class = "success" style = "text-align: center;">Status</th>
-
-                                                    
-                                                            </tr>
-                                                        </thead>
-                                                        
-                                                        <tbody>
-                                                            <tr>
-                                                            <td><input type="checkbox" name="select_all" value="1" id="example-select-all"></td>
-                                                           <td>08/12/2016</td>
-                                                           <td>08/12/2016</td>
-                                                           <td>0.00</td>
-                                                           <td>200.00</td>
-                                                           </tr>
-                                                            <tr>
-                                                            <td><input type="checkbox" name="select_all" value="1" id="example-select-all"></td>
-                                                           <td>08/12/2016</td>
-                                                           <td>08/12/2016</td>
-                                                           <td>0.00</td>
-                                                           <td>200.00</td>
-                                                           </tr>
-                                                            <tr>
-                                                            <td><input type="checkbox" name="select_all" value="1" id="example-select-all"></td>
-                                                           <td>08/12/2016</td>
-                                                           <td>08/12/2016</td>
-                                                           <td>0.00</td>
-                                                           <td>200.00</td>
-                                                           </tr>
-                                                           
-                                                            
-                                                        </tbody>
-                                                </table>
-                                           <div class="footer">
-                                              <button class="btn btn-success" onclick="hide();" style="align:left">Cancel</button>
-                                              <button class="btn btn-success" data-toggle = "modal" title='popUpPayment' data-target = '#popUpPayment' style="align:left">Pay</button>
-                                           </div>
-                                        </div>
-
-
-                                </div>
-                            </div>
-    </div>
- <!--COLLECTION PAY MODAL-->
- <!--ILIPAT NA LANG SA TRANSVIEW-->
-  <div class = 'modal fade' id = 'popUpPayment'>
-                            <div class = 'modal-dialog' style = 'width: 80%;'>
-                                <div class = 'modal-content' style = ''>
-                                    
-
-                                        <div class="modal-body">
-                                        
-                                            <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="50%">
-                                                    <thead>
-                                                            <tr>
-                                                                
-                                                                <th class = "success" style = "text-align: center;">Due Date</th>
-                                                                <th class = "success" style = "text-align: center;">Penalty</th>
-                                                            
-                                                                <th class = "success" style = "text-align: center;">Payment</th>
-                                                    
-                                                            </tr>
-                                                        </thead>
-                                                        
-                                                        <tbody>
-                                                             
-                                                        </tbody>
-                                                </table>
-
-                                            <div class="form-group">
-                                                <label>Payment Details</label>
-                                                <label>Payment Details</label>
-
-                                            </div>
-                                           
-                                        </div>
-
-
-                                </div>
-                            </div>
-    </div>
-
-     <!--DOWNPAYMENT VIEW MODAL-->
- <!--ILIPAT NA LANG SA TRANSVIEW-->
-  <div class = 'modal fade' id = 'viewDownpayment'>
-                            <div class = 'modal-dialog' style = 'width: 50%;'>
-                                <div class = 'modal-content' style = ''>
-                                                
-                                                    <!--header-->
-                                        <div class = 'modal-header' style='background:#b3ffb3;'>
-                                              <button type = 'button' class = 'close' data-dismiss = 'modal'>&times;</button>
-                                            <h2 class = 'modal-title'>Downpayment: (NAME OF CUSTOMER)</h2>
-                                        </div>
-
-                                        <div class="modal-body">
-                                        
-                                            <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                                                    <thead>
-                                                            <tr>
-                                                                
-                                                                <th class = "success" style = "text-align: center;">Transaction Code</th>
-                                                                <th class = "success" style = "text-align: center;">Unit Code</th>
-                                                                <th class = "success" style = "text-align: center;">Balance</th>
-                                                                <th class = "success" style = "text-align: center;">Due Date</th>
-                                                                <th class = "success" style = "text-align: center;">Action</th>
-                                                    
-                                                            </tr>
-                                                        </thead>
-                                                        
-                                                        <tbody>
-                                                           <td>Transcode 1</td>
-                                                           <td>Unit 1</td>
-                                                           <td>100.00</td>
-                                                           <td>September 30, 2016</td>
-                                                            <td align='center'>
-                                <button type = "button" class = "btn btn-success" data-toggle = "modal" title='popUpCollection' data-target = '#popUpCollection'>
-                                <i class='glyphicon glyphicon-folder-open'> COLLECT</i></button>
-                                                            
-                                                        </tbody>
-                                                </table>
-                                           
-                                        </div>
-
-
-                                </div>
-                            </div>
-    </div>
-  </body>
+     </body>
 </html>
