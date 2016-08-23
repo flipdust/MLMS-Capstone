@@ -49,7 +49,7 @@
                             <li><a href="reservation.php" style="font-size: 12px">UNIT AVAILMENT</a></li>
                             <li><a href = "payment.php" style="font-size: 12px">PAYMENT COLLECTION</a></li>
                             <li><a href = "unitmanagement-transaction.php" style="font-size: 12px">UNIT MANAGEMENT</a></li>
-                            <li><a href = "#" style="font-size: 12px">SERVICES REQUEST</a></li>
+                            <li><a href = "service-request-transaction.php" style="font-size: 12px">SERVICES REQUEST</a></li>
                              <li><a href = "#" style="font-size: 12px">ASSIGN SCHEDULE</a></li>
 
                         </ul>
