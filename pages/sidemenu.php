@@ -46,11 +46,11 @@
                     <li style="font-size: 20px"><a><i class="fa fa-briefcase"></i> Transactions <span class="fa fa-chevron-down"></span></a>
                             <ul class="nav child_menu">
                             <li class = "divider"></li>
-                            <li><a href="reservation.php" style="font-size: 12px">UNIT AVAILMENT</a></li>
-                            <li><a href = "payment.php" style="font-size: 12px">PAYMENT COLLECTION</a></li>
+                            <li><a href="reservation.php" style="font-size: 12px">AVAIL UNIT</a></li>
+                            <li><a href = "payment.php" style="font-size: 12px">PAYMENT</a></li>
                             <li><a href = "unitmanagement-transaction.php" style="font-size: 12px">UNIT MANAGEMENT</a></li>
                             <li><a href = "service-request-transaction.php" style="font-size: 12px">SERVICES REQUEST</a></li>
-                             <li><a href = "#" style="font-size: 12px">ASSIGN SCHEDULE</a></li>
+                             <li><a href = "#" style="font-size: 12px">SCHEDULE ASSIGNMENT</a></li>
 
                         </ul>
                     </li>
