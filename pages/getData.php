@@ -44,9 +44,10 @@
             $dblSellingPrice = 0;
             if($row2 = mysql_fetch_array($result2)){
                 $dblSellingPrice = $row2['dblSellingPrice'];
+                $strTypeName = $row2['strTypeName'];
             }
             mysql_close($conn2);
-            echo "$intBlockID,$strBlockName,$intNoOfLot,$dblSellingPrice";
+            echo "$intBlockID,$strBlockName,$intNoOfLot,$dblSellingPrice,$strTypeName";
         }
 
         while($row = mysql_fetch_array($result)){
@@ -62,9 +63,10 @@
             $dblSellingPrice = 0;
             if($row2 = mysql_fetch_array($result2)){
                 $dblSellingPrice = $row2['dblSellingPrice'];
+                $strTypeName = $row2['strTypeName'];
             }
             mysql_close($conn2);
-            echo ",$intBlockID,$strBlockName,$intNoOfLot,$dblSellingPrice";
+            echo ",$intBlockID,$strBlockName,$intNoOfLot,$dblSellingPrice,$strTypeName";
         }
         //mysql_close($conn);
     }
