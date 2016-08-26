@@ -180,6 +180,10 @@ if (isset($_POST['btnDeactivate']))
             display: inline-block;
           }
 
+          .reservation {
+            display: none;
+          }
+
       </style>
         
          <script>
@@ -213,8 +217,8 @@ if (isset($_POST['btnDeactivate']))
                   if(data != 0) {
                     arrayData = data.split(",");
                     $('#selectBlock').append("<option selected disabled>Choose Block</option>");
-                    for(var i=0; i<arrayData.length-1; i+=4){
-                      $('#selectBlock').append("<option value="+arrayData[i]+" lot="+arrayData[i+2]+" price="+arrayData[i+3]+">"+arrayData[i+1]+"</option>");
+                    for(var i=0; i<arrayData.length-1; i+=5){
+                      $('#selectBlock').append("<option value="+arrayData[i]+" lot="+arrayData[i+2]+" price="+arrayData[i+3]+" type='"+arrayData[i+4]+"'>"+arrayData[i+1]+"</option>");
                     }
                   }
                 });
@@ -243,7 +247,8 @@ if (isset($_POST['btnDeactivate']))
                       strSectionName = $('#selectSection option:selected').html();
                       strBlockName = $('#selectBlock option:selected').html();
                       intPrice = $('#selectBlock option:selected').attr('price');
-                      $('#lotMap').append("<div class='lot "+lotStatus+"' id="+arrayData[i]+" lotStatus='"+lotStatus+"' Section='"+strSectionName+"' Block='"+strBlockName+"' Price='"+intPrice+"'>"+arrayData[i+1]+"</div>");
+                      strTypeName = $('#selectBlock option:selected').attr('type');
+                      $('#lotMap').append("<div class='lot "+lotStatus+"' id="+arrayData[i]+" lotStatus='"+lotStatus+"' Section='"+strSectionName+"' Block='"+strBlockName+"' Price='"+intPrice+"' Type='"+strTypeName+"'>"+arrayData[i+1]+"</div>");
                       $('#legendLotAvailable').html(intLotAvailable);
                       $('#legendLotReserved').html(intLotReserved);
                       $('#legendLotOwned').html(intLotOwned);
@@ -272,7 +277,7 @@ if (isset($_POST['btnDeactivate']))
                       $('#levelMap').hide();
                       strLevelID = "#lvl"+arrayData[i];
                       $(strLevelID).append("<div class='ashcrypt'>Level "+arrayData[i+1]+"</div>");
-                      addAshcrypt(arrayData[i]);
+                      addAshcrypt(arrayData[i],arrayData[i+1],arrayData[i+2],arrayData[i+3]);
                     }
                   }
                 });
@@ -288,7 +293,7 @@ if (isset($_POST['btnDeactivate']))
                 $('#btnBill').show();
                 $('#popUpWindow').modal('hide');
                 $(lotID).addClass('disabled');
-                $('#tableBody').append("<tr><td>"+intNoUnit+++"</td><td><a class='btn btn-round btn-info' lotID='"+lotID+"' onclick='view(this);'><i class='fa fa-eye'></i> View</a></td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>");
+                $('#tableBody').append("<tr><td>"+intNoUnit+++"</td><td><a class='btn btn-round btn-info' lotID='"+lotID+"' onclick='view(this);'><i class='fa fa-eye'></i> View</a></td><td class='reservation'>1</td><td>1</td><td>1</td><td class='reservation'>1</td><td>1</td></tr>");
               });
 
               $('#removeunit').on('click', function(){
@@ -296,7 +301,23 @@ if (isset($_POST['btnDeactivate']))
                 $('#popUpWindow').modal('hide');
                 $(lotID).removeClass('disabled');
               });
+
+              $('body').on('click', '.ashcrypt', function(){
+                 ashcryptID = $(this).attr('id');
+                 ashcryptID = '#' + ashcryptID;
+                 displayAsh(ashcryptID);
+              });
+
+              $('body').on('change', '#typeAvail', function(){
+                if($('#typeAvail option:selected').attr('id') == "spotcash") {
+                  $('.reservation').hide();
+                }
+                else {
+                  $('.reservation').show();
+                }
+              });
             });
+
 
           function view(thisLotID){
             thisLotID = $(thisLotID).attr('lotID');
@@ -310,8 +331,10 @@ if (isset($_POST['btnDeactivate']))
             strLotName = $(lotID).html();
             dblPrice = $(lotID).attr('Price');
             lotStatus = $(lotID).attr('lotStatus');
+            strTypeName = $(lotID).attr('Type');
             $('#inputSectionName').val(strSectionName);
             $('#inputBlockName').val(strBlockName);
+            $('#inputLotType').val(strTypeName);
             $('#inputPrice').val(dblPrice);
             $('#inputUnitName').val(strLotName);
             $('#inputStatus').val(lotStatus);
@@ -326,7 +349,7 @@ if (isset($_POST['btnDeactivate']))
             $('#popUpWindow').modal('show');
           }
 
-          function addAshcrypt(intLevelID){
+          function addAshcrypt(intLevelID,strLevelName,intNoOfUnit,dblSellingPrice){
             $.get("getData.php?fnName=getAsh&intLevelAshID="+intLevelID, function(data){
               strLevelID = "#lvl"+intLevelID;
               if(data != '') {
@@ -338,7 +361,7 @@ if (isset($_POST['btnDeactivate']))
                     case '2': unitStatus = "owned"; intAshOwned++; break;
                     default: break;
                   }
-                  $(strLevelID).append("<div class='ashcrypt "+unitStatus+"'>"+arrayData[i+1]+"</div>");
+                  $(strLevelID).append("<div class='ashcrypt "+unitStatus+"' unitStatus="+unitStatus+" id='"+arrayData[i]+"' capacity="+arrayData[i+3]+" level='"+strLevelName+"' noUnit="+intNoOfUnit+" price="+dblSellingPrice+">"+arrayData[i+1]+"</div>");
                 }
               }
               else {
@@ -351,6 +374,31 @@ if (isset($_POST['btnDeactivate']))
               $('#legendAshOwned').html(intAshOwned);
             });
           }
+
+
+
+          function displayAsh(ashcryptID){
+            strLevelName = $(ashcryptID).attr('level');
+            intCapacity = $(ashcryptID).attr('capacity');
+            strAshName = $(ashcryptID).html();
+            dblPrice = $(ashcryptID).attr('price');
+            unitStatus = $(ashcryptID).attr('unitStatus');
+            $('#inputSectionName').val(strLevelName);
+            $('#inputBlockName').val(intCapacity);
+            $('#inputPrice').val(dblPrice);
+            $('#inputUnitName').val(strAshName);
+            $('#inputStatus').val(unitStatus);
+            if($(ashcryptID).hasClass("disabled")) {
+              $('#addunit').hide();
+              $('#removeunit').show();
+            }
+            else {
+              $('#addunit').show();
+              $('#removeunit').hide();
+            }
+            $('#popUpWindow').modal('show');
+          }
+
         </script>
   </head>
 
@@ -682,10 +730,131 @@ if (isset($_POST['btnDeactivate']))
                                                     </div>
                                                   </div>
 
+
+                                                   <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Lot type: </label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                                      <input id="inputLotType" type="text" class="form-control" readonly="readonly" placeholder="St.Mattew">
+                                                    </div>
+                                                  </div>
+
                                                       <div class="form-group">
                                                     <label class="control-label col-md-3 col-sm-3 col-xs-12">Unit Name: </label>
                                                     <div class="col-md-9 col-sm-9 col-xs-12">
                                                       <input id="inputUnitName" type="text" class="form-control" readonly="readonly" placeholder="A0001">
+                                                    </div>
+                                                  </div>
+                                                    
+                                                
+                                                    </div>
+                                                 </div>
+                                                </form>
+                                          </div>
+
+                                            <div class="col-xs-6 col-sm-3">
+                                              <legend> Customer</legend>
+                                                    
+                                             <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Status: </label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                                      <input id="inputStatus" type="text" class="form-control" readonly="readonly" placeholder="Available">
+                                                    </div>
+                                                  </div>
+
+                                                   <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Owner: </label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                                      <input id="inputOwner" type="text" class="form-control" readonly="readonly" placeholder="N/A">
+                                                    </div>
+                                                  </div>
+
+                                                   <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Price: </label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                                      <input id="inputPrice" type="text" class="form-control" readonly="readonly" placeholder="P500,000">
+                                                    </div>
+                                                  </div>
+                                                  
+                                               <br>
+                                                </div>
+                           
+                                                 <div class="modal-footer col-md-6" >
+                                                    <button  id= "addunit" type="button" class="btn btn-success btn-lg col-md-8" ><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add Unit
+                                                    </button>
+                                                    <button  id="removeunit" type="button" class="btn btn-success btn-lg col-md-8" style="display:none;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Remove Unit
+                                                    </button>
+                                                  </div>
+                            </div>
+
+                           </div> <!--PANEL BODY-->
+
+                                               
+
+                          </div>
+                          </div>
+                        </div>
+                        </form>                        
+                             </div>
+
+                            </div>
+                           </div> <!--PANEL BODY-->
+                 
+              </div>
+
+
+
+
+               <!--------------------------------------Ashcrypt Details---->
+
+<div class = "modal fade" id = "ashDetails" style="z-index:1501;">
+    <div class = "modal-dialog" style = "width:70%; height: 60% ; z-index:1002;">
+       <div class = "modal-content">
+         <!--header-->
+          
+      <div class = "modal-header" style="background:#b3ffb3;">
+          <button type = "button" class = "close" data-dismiss = "modal">&times;</button>
+          <center><h3 class = "modal-title">Ashcrypt Details</h3></center>
+         </div>
+                        
+         <!--body (form)-->
+         <div class = "modal-body">
+                    
+                          
+           <form class="form-horizontal" role="form" action = "reservation.php" method= "post">             
+                  
+      
+                      
+                 <div class="row">
+                       <div class=  "col-lg-12">
+                          <div class="panel panel-default">
+                        
+                                <div class="panel-body">
+                                      <div class="row">
+                                          <div class="col-lg-6">
+                                              <form role="form">
+                                                 <div class="form-group">
+                                                  <div class="col-sm-10">
+
+                                                  <legend>Unit</legend>      
+
+                                                  <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Block: </label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                                      <input id="inputAshBlock" type="text" class="form-control" readonly="readonly" placeholder="East">
+                                                    </div>
+                                                  </div>
+
+                                                      <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Level: </label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                                      <input id="inputAshLevel" type="text" class="form-control" readonly="readonly" placeholder="St.Mattew">
+                                                    </div>
+                                                  </div>
+
+                                                      <div class="form-group">
+                                                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Unit Name: </label>
+                                                    <div class="col-md-9 col-sm-9 col-xs-12">
+                                                      <input id="inputAshUnit" type="text" class="form-control" readonly="readonly" placeholder="A0001">
                                                     </div>
                                                   </div>
                                                     
@@ -762,10 +931,10 @@ if (isset($_POST['btnDeactivate']))
 
                               <div class= "col-md-12">
                                   <span class="section">Personal Info</span>
-                                  <button onclick="add();" type="submit" class="btn btn-success pull-left" name= "btnGo" data-toggle="modal" data-target="#addCust">Add customer</button>
+                                  <button onclick="add();" type="submit" class="btn btn-success pull-left" name= "btnGo">Add customer</button>
                                   
                                   <div class="form-group">       
-                                        <select class="select2_single form-control" style="width: 400px;" tabindex="-1" >
+                                        <select class="select2_single form-control" style="width: 350px; z-index:2000;" tabindex="-1" >
                                           <option></option>
                                           <option>Jeron Cruz</option>
                                           <option>Daniella Soriano</option>
@@ -773,12 +942,12 @@ if (isset($_POST['btnDeactivate']))
                                   </div>
                               
 
-                              <div class="col-md-6"> 
+                              <div class="col-md-7" style="margin-left: -9em;"> 
                                   <div class="form-group">
                                       <label class="control-label col-md-4 col-sm-3 col-xs-12" for="first-name">First Name
                                           <span class="required">*</span>
                                       </label>
-                                      <div class="col-md-7 col-sm-6 col-xs-12">
+                                      <div class="col-md-5 col-sm-6 col-xs-12">
                                           <input type="text" id="first-name" required="required" class="form-control col-md-7 col-xs-12">
                                       </div>
                                   </div>
@@ -788,7 +957,7 @@ if (isset($_POST['btnDeactivate']))
                                   <label class="control-label col-md-4 col-sm-3 col-xs-12" for="last-name">Last Name
                                       <span class="required">*</span>
                                   </label>
-                                  <div class="col-md-7 col-sm-6 col-xs-12">
+                                  <div class="col-md-5 col-sm-6 col-xs-12">
                                       <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
                                   </div>
                               </div>
@@ -796,7 +965,7 @@ if (isset($_POST['btnDeactivate']))
                               <div class="form-group">
                                   <label for="middle-name" class="control-label col-md-4 col-sm-3 col-xs-12">Middle Name
                                   </label>
-                                  <div class="col-md-7 col-sm-6 col-xs-12">
+                                  <div class="col-md-5 col-sm-6 col-xs-12">
                                       <input id="middle-name" class="form-control col-md-7 col-xs-12" type="text" name="middle-name">
                                   </div>
                               </div>
@@ -805,7 +974,7 @@ if (isset($_POST['btnDeactivate']))
                                   <label class="control-label col-md-4 col-sm-3 col-xs-12" for="address">Contact No.
                                       <span class="required">*</span>
                                   </label>
-                                  <div class="col-md-6 col-sm-6 col-xs-12">
+                                  <div class="col-md-4 col-sm-6 col-xs-12">
                                       <input type="text" class="form-control"  required= "required" data-inputmask="'mask' : '(9999) 999-9999'">
                                   </div>
                               </div>
@@ -815,12 +984,12 @@ if (isset($_POST['btnDeactivate']))
                                       <span class="required">*</span>
                                   </label>
                                   <div class="col-md-8 col-sm-6 col-xs-12">
-                                      <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-7 col-xs-12">
+                                      <input type="text" id="last-name" name="last-name" required="required" class="form-control col-md-9 col-xs-12">
                                   </div>
                               </div>
                               </div>
                           
-                              <div class="col-md-6">
+                              <div class="col-md-5">
                                  <div class="form-group">
                                     <label class="control-label col-md-4 col-sm-3 col-xs-12">Date Of Birth 
                                         <span class="required">*</span>
@@ -880,11 +1049,11 @@ if (isset($_POST['btnDeactivate']))
                                 <div class="x_title">
                                     <h2>Unit List</h2>
                                     <div class="col-md-6 col-sm-9 col-xs-12">
-                                            <select class="form-control">
-                                              <option>Type of Availment:</option>
-                                              <option>Spotcash</option>
-                                              <option>Reservation</option>
-                                              <option>At need</option>
+                                            <select class="form-control" id="typeAvail">
+                                              <option disabled selected>Type of Availment:</option>
+                                              <option id="spotcash">Spotcash</option>
+                                              <option id="reserve">Reservation</option>
+                                              <option id="atneed">At need</option>
                                             </select>
                                           </div>
                                     <div class="clearfix"></div>
@@ -900,10 +1069,10 @@ if (isset($_POST['btnDeactivate']))
                         
                                                 <th class="column-title">Unit ID</th>
                                                 <th class="column-title">Unit Details</th>
-                                                <th class="column-title">Years to pay</th>
+                                                <th class="column-title reservation">Years to pay</th>
                                                 <th class="column-title">Price</th>
                                                 <th class="column-title">Discounted Price </th>
-                                                <th class="column-title">Monthly</th>
+                                                <th class="column-title reservation">Monthly</th>
                                                 <th class="column-title no-link last"><span class="nobr">Action</span>
                                                 </th>
                                                 <th class="bulk-actions" colspan="7">
@@ -917,14 +1086,14 @@ if (isset($_POST['btnDeactivate']))
                                   
                                               <td class=" ">Unit No.1</td>
                                               <td class=" "><button data-target="#popUpWindow" data-toggle="modal">View</button><i class="success fa fa-long-arrow-up"></i></td>
-                                              <td class=" ">
+                                              <td class="  reservation">
                                                   <select class="form-control">
                                                                 <option>1</option>
                                                   </select>
                                               </td>
                                               <td class=" ">P76,230.00</td>
                                               <td class="a-right a-right ">P9,147.60</td>
-                                              <td class=" ">P6,352.50</td>
+                                              <td class="  reservation">P6,352.50</td>
                                               <td class=" last"><a href="#"><button>Remove</button></a>
                                               </td>
                                           </tr>
